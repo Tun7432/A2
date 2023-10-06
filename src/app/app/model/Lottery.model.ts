@@ -5,17 +5,16 @@
 //   const lottery = Convert.toLottery(json);
 
 export interface Lottery {
-  id: number;
-  ticket_number: number;
-  price: number;
-  
-  period: number;
-  set_number: number;
-  created_at: string;
-  updated_at: string;
+ id:            number;
+    ticket_number: number;
+    price:         number;
+    quantity:      number;
+    period:        number;
+    set_number:    number;
+    created_at:    string;
+    updated_at:    string;
   isSelected?: boolean;
   [key: string]: any;
-  quantity?: number; // เพิ่ม property 'quantity' พร้อมกำหนดชนิดเป็น number
 }
 
 // Converts JSON strings to/from your types
