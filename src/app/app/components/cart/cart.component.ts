@@ -1,21 +1,25 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { CartService } from 'src/app/services/cart.service';
-import { Lottery } from 'src/app/model/Lottery.model';
-import { Router } from '@angular/router';
 import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
+import { Lottery } from 'src/app/model/Lottery.model';
+import { CartService } from 'src/app/services/cart.service';
+import { LotteryService } from 'src/app/services/lottery.service';
 
-import { MatDialog } from '@angular/material/dialog'; 
+import { MatDialog } from '@angular/material/dialog';
 @Component({
   selector: 'app-cart',
   templateUrl: './cart.component.html',
   styleUrls: ['./cart.component.css'],
 })
 export class CartComponent implements OnInit {
+  [x: string]: any;
   cartItems: Lottery[] = [];
   
   constructor(private cartService: CartService, private router: Router,
     private snackBar: MatSnackBar,
-    private dialog: MatDialog     ) {}
+    private dialog: MatDialog,private data: LotteryService,
+    private http: HttpClient,     ) {}
 
   ngOnInit() {
     this.cartService.getItems().subscribe((items) => {
@@ -54,6 +58,17 @@ export class CartComponent implements OnInit {
     this.cartService.clearCart();
     console.log("ลบทั้งหมด",this.cartService)
   }
+  confirmCart() {
+  const snackBarRef = this.snackBar.open('การซื้อเสร็จสิ้น', 'Close', {
+    duration: 5000, // Show the message for 5 seconds
+  });
+
+  snackBarRef.afterDismissed().subscribe(() => {
+    // Redirect to a new page or perform any other action after the snackbar is dismissed
+    this.router.navigate(['/member']);
+  });
+}
+
 
   getCartBadgeCount(lottery: Lottery): number {
     const existingLottery = this.cartItems.find(
@@ -117,49 +132,117 @@ decrementQuantity(lottery: Lottery) {
     // ถ้ามีแค่ 1 ใบให้ไม่ทำอะไร
   }
 }
-
-// // เพิ่มจำนวนสลากในตะกร้า
-// getCartBadgeCount(lottery: Lottery): number {
-//   const existingLottery = this.cartItems.find(
-//     (item) => item.ticket_number === lottery.ticket_number
-//   );
-//   const quantity = existingLottery && existingLottery.quantity ? existingLottery.quantity : 0;
-//   if (existingLottery) {
-//     console.log(`จำนวนสลาก ${existingLottery.ticket_number} ในตะกร้า: ${quantity}`);
-//   }
-//   return quantity;
-// }
-
-
-
-
-
-  // getCartBadgeCount(lottery: Lottery): number {
-  //   const existingLottery = this.cartItems.find((item) => 
-  //     item.ticket_number === lottery.ticket_number &&
-  //     item.set_number === lottery.set_number &&
-  //     item.period === lottery.period
-  //   );
-  //   return existingLottery ? existingLottery.quantity : 0;
-  // }
   
+//   add() {
+//   // Check if the cart is not empty
+//   if (this.cartItems.length === 0) {
+//     this.snackBar.open('Your cart is empty.', 'Close', {
+//       duration: 2000,
+//     });
+//     return;
+//   }
 
-  // proceedToPayment() {
-  //   // เปิด dialog การชำระเงิน
-  //   const dialogRef = this.dialog.open(DialogPaymentComponent, {
-  //     width: '400px',
-  //     data: { cartItems: this.cartItems }, // ส่งข้อมูลตะกร้าไปยัง dialog
-  //   });
-
-  //   dialogRef.afterClosed().subscribe((result: any) => {
-  //     console.log('Payment dialog was closed', result);
-  //     if (result === 'success') {
-  //       // ทำสิ่งที่คุณต้องการเมื่อชำระเงินสำเร็จ
-  //       // ส่งค่า 'success' กลับไปยังหน้าตะกร้า
-  //       this.clearCart();
-  //     }
-  //   });
+//   // Prepare the data to be added to the database
+//   const dataToAdd = this.cartItems.map((item) => {
+//     return {
     
-  // }
+//   user_id: this.cartService.Usersid,
+//   ticket_number: item.ticket_number,
+//   period: item.period,
+//   set_number: item.set_number,
+//   price: item.price,
+//   quantity: item.quantity
+
+
+//     };
+//   });
+//     console.log(dataToAdd);
+//   // Send a POST request to the server to add data to the database
+//   this.http
+//     .post(this.data.apiEndpoint + '/purchase', { items: dataToAdd })
+//     .subscribe(
+//       (response) => {
+//         // Handle a successful response (e.g., show a success message)
+//         console.log('Data added to the database:', response);
+//         this.router.navigate(['/member']);
+//         this.snackBar.open('Items added to the database successfully.', '', {
+//           duration: 4000,
+//           horizontalPosition: 'center',
+//           verticalPosition: 'top',
+//         });
+//       },
+//       (error) => {
+//         // Handle an error response (e.g., show an error message)
+//         console.error('Error adding data to the database:', error);
+//         this.snackBar.open('Error adding items to the database.', 'Close', {
+//           duration: 2000,
+//           horizontalPosition: 'center',
+//           verticalPosition: 'top',
+//         });
+//       }
+//     );
+// }
+add() {
+  // Check if the cart is not empty
+  if (this.cartItems.length === 0) {
+    this.snackBar.open('Your cart is empty.', 'Close', {
+      duration: 2000,
+    });
+    return;
+  }
+
+  // Prepare the data to be added to the database
+  const orderDetails = this.cartItems.map((item) => ({
+    lot_id: item.id, // Assuming you have a 'lot_id' property in your cart items
+    amount: item.quantity,
+    price: item.price,
+    total_price: (item.quantity || 0) * item.price,
+  }));
+
+ 
+//   user_id: this.cartService.Usersid,
+//   ticket_number: item.ticket_number,
+//   period: item.period,
+//   set_number: item.set_number,
+//   price: item.price,
+//   quantity: item.quantity
+
+  const grandTotal = orderDetails.reduce((total, item) => total + item.total_price, 0);
+  
+  const orderData = {
+    ac_id: this.cartService.Usersid,
+    grand_total: grandTotal, // Assuming you have 'totalPrice' calculated
+    quantity: this.calculateTotalItems(),
+    details: orderDetails,
+  };
+
+  console.log(orderData);
+
+  // Send a POST request to the server to add data to the database
+  this.http
+    .post(this.data.apiEndpoint +'/lottery/buy', orderData, {
+      observe: 'response',
+    })
+    .subscribe(
+      (response) => {
+        console.log(JSON.stringify(response.status));
+        console.log(JSON.stringify(response.body));
+
+       
+        this.confirmCart();
+
+
+
+      },
+      (error) => {
+       
+        console.error('Error placing the order:', error);
+
+        
+      }
+    );
+}
+
+
 }
 

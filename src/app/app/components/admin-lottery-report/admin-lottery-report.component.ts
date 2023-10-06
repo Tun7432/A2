@@ -9,9 +9,6 @@ import { PurchaseComponent } from '../purchase/purchase.component';
 export class AdminLotteryReportComponent {
   displayedColumns: string[] = ['date', 'name', 'lottery', 'amount', 'price'];
   dataSource = new MatTableDataSource<PurchaseComponent>([]);
-  // รายการตัวเลือก "ประจำวัน"
-  days: string[] = ['วันจันทร์', 'วันอังคาร', 'วันพุธ', 'วันพฤหัสบดี', 'วันศุกร์', 'วันเสาร์', 'วันอาทิตย์'];
-
   // รายการตัวเลือก "ประจำเดือน"
   months: string[] = ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'];
 

@@ -1,17 +1,17 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { LoginComponent } from './components/login/login.component';
 import { DashboardAdminComponent } from './components/dashboard-admin/dashboard-admin.component';
+import { LoginComponent } from './components/login/login.component';
+import { LotteryDetailComponent } from './components/lottery-detail/lottery-detail.component';
 import { LotterySearchComponent } from './components/lottery-search/lottery-search.component';
 import { ManageLotteryComponent } from './components/manage-lottery/manage-lottery.component';
 import { RegisterComponent } from './components/register/register.component';
-import { LotteryDetailComponent } from './components/lottery-detail/lottery-detail.component';
 
-import {HomeComponent} from './components/home/home.component';
-import { MemberComponent } from './components/member/member.component';
-import { CartComponent } from './components/cart/cart.component';
-import { PersonalInformationComponent } from './components/personal-information/personal-information.component';
 import { AdminLotteryReportComponent } from './components/admin-lottery-report/admin-lottery-report.component';
+import { CartComponent } from './components/cart/cart.component';
+import { HomeComponent } from './components/home/home.component';
+import { MemberComponent } from './components/member/member.component';
+import { PersonalInformationComponent } from './components/personal-information/personal-information.component';
 import { PurchaseDetailComponent } from './components/purchase-detail/purchase-detail.component';
 import { PurchaseHistoryComponent } from './components/purchase-history/purchase-history.component';
 
